@@ -1,4 +1,6 @@
-.git
+.git/
 Types_of_sorting.vcxproj
 Types_of_sorting.vcxproj.filters
 Types_of_sorting.vcxproj.user
+sorting_time.txt
+x64/
