@@ -8,6 +8,35 @@
 
 
 // creates a vector of random numbers with length n and less than range
+void swap(int* arr, int i, int I) {
+    int temp = arr[i];
+    arr[i] = arr[I];
+    arr[I] = temp;
+}
+
+void HS(int* arr, int size, int i) {
+    int big = i;
+    for (int j = i * 2 + 1; j < i * 2 + 3 && j < size; j++) {
+        if (arr[big] < arr[j]) {
+            big = j;
+        }
+    }
+    if (i != big) {
+        swap(arr, i, big);
+        HS(arr, size, big);
+    }
+}
+void psort(int * arr, int size) {
+    for (int i = size / 2 - 1; i >= 0; i--) {
+        HS(arr, size, i);
+    }
+
+    for (int i = size - 1; i >= 0; i--) {
+        swap(arr, 0, i);
+        HS(arr, i, 0);
+    }
+}
+
 std::vector<int> make_array(int n, int range)
 {
     std::vector<int> list(n);
