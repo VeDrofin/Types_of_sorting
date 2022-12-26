@@ -40,7 +40,6 @@ void HeapSort1(std::vector<int> arr, int size, int i) {
         HeapSort1(arr, size, big);
     }
 }
-
 void HeapSort2(std::vector<int> arr, int size) {
     for (int i = size / 2 - 1; i >= 0; i--) {
         HeapSort1(arr, size, i);
