@@ -8,6 +8,13 @@
 
 
 // creates a vector of random numbers with length n and less than range
+int * array make_dar(int n, int range)
+{
+    int *  list= new int[n];
+    for (int i = 0; i < n; i++)
+        list[i] = (rand() * rand()) % range;
+    return(list);
+}
 std::vector<int> make_array(int n, int range)
 {
     std::vector<int> list(n);
@@ -93,6 +100,8 @@ void InsertionSort(int n, std::vector<int> mass)
 
 int main()
 {
+    int * arr = new int[10000000];
+
     srand(time(NULL));
     int size = 10000000; // enter the size of the array
     std::vector<int> mass = make_array(size, 100000000);
