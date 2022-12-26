@@ -22,13 +22,13 @@ std::vector<int> make_array(int n, int range)
         list[i] = (rand() * rand()) % range;
     return(list);
 }
-void swap(int* arr, int i, int I) {
+void swap(std::vector<int> arr, int i, int I) {
     int temp = arr[i];
     arr[i] = arr[I];
     arr[I] = temp;
 }
 
-void HS(int* arr, int size, int i) {
+void HeapSort1(std::vector<int> arr, int size, int i) {
     int big = i;
     for (int j = i * 2 + 1; j < i * 2 + 3 && j < size; j++) {
         if (arr[big] < arr[j]) {
@@ -40,9 +40,10 @@ void HS(int* arr, int size, int i) {
         HS(arr, size, big);
     }
 }
-void psort(int * arr, int size) {
+
+void HeapSort2(std::vector<int> arr, int size) {
     for (int i = size / 2 - 1; i >= 0; i--) {
-        HS(arr, size, i);
+        HeapSort1(arr, size, i);
     }
 
     for (int i = size - 1; i >= 0; i--) {
@@ -102,12 +103,11 @@ int main()
 {
     srand(time(NULL));
     int size = 10000000; // enter the size of the array
-    int * Array = make_dar(size, 10000000);
     std::vector<int> mass = make_array(size, 100000000);
 
     std::ofstream out("sorting_time.txt", std::ios::app);
     std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-    psort(Array, size);
+    HeapSort2(mass, size);
     std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
     std::chrono::duration<double> sec = end - start;
     out << "HeapSort "
