@@ -37,7 +37,7 @@ void HeapSort1(std::vector<int> arr, int size, int i) {
     }
     if (i != big) {
         swap(arr, i, big);
-        HS(arr, size, big);
+        HeapSort1(arr, size, big);
     }
 }
 
@@ -48,7 +48,7 @@ void HeapSort2(std::vector<int> arr, int size) {
 
     for (int i = size - 1; i >= 0; i--) {
         swap(arr, 0, i);
-        HS(arr, i, 0);
+        HeapSort1(arr, i, 0);
     }
 }
 
