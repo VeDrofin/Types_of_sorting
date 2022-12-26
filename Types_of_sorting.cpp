@@ -8,7 +8,7 @@
 
 
 // creates a vector of random numbers with length n and less than range
-int * array make_dar(int n, int range)
+int * make_dar(int n, int range)
 {
     int *  list= new int[n];
     for (int i = 0; i < n; i++)
@@ -100,13 +100,18 @@ void InsertionSort(int n, std::vector<int> mass)
 
 int main()
 {
-    int * arr = new int[10000000];
-
     srand(time(NULL));
     int size = 10000000; // enter the size of the array
+    int * Array = make_dar(size, 10000000);
     std::vector<int> mass = make_array(size, 100000000);
 
     std::ofstream out("sorting_time.txt", std::ios::app);
+    std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+    psort(Array, size);
+    std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
+    std::chrono::duration<double> sec = end - start;
+    out << "HeapSort "
+        << int(sec.count()) << " sec \n";
 
     std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
     ShellSort(size, mass);
