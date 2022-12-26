@@ -8,6 +8,13 @@
 
 
 // creates a vector of random numbers with length n and less than range
+std::vector<int> make_array(int n, int range)
+{
+    std::vector<int> list(n);
+    for (int i = 0; i < n; i++)
+        list[i] = (rand() * rand()) % range;
+    return(list);
+}
 void swap(int* arr, int i, int I) {
     int temp = arr[i];
     arr[i] = arr[I];
@@ -35,14 +42,6 @@ void psort(int * arr, int size) {
         swap(arr, 0, i);
         HS(arr, i, 0);
     }
-}
-
-std::vector<int> make_array(int n, int range)
-{
-    std::vector<int> list(n);
-    for (int i = 0; i < n; i++)
-        list[i] = (rand() * rand()) % range;
-    return(list);
 }
 
 void ShellSort(int n, std::vector<int> mass)
