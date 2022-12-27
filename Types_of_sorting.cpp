@@ -181,7 +181,7 @@ int main()
     std::cin >> n;
 
     std::ofstream out("sorting time.txt", std::ios::app);
-    for (int p = 0; p < 5; p++) {
+    for (int p = 0; p < n; p++) {
 
         std::cout << "Set for this session: " << p+1 << " / " << n << std::endl;
 
