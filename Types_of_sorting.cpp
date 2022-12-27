@@ -9,20 +9,21 @@
 
 
 // creates a vector of random numbers with length n and less than range
-int * make_array(int n, int range)
+int* make_array(int n, int range)
 {
-    int * list = new int[n];
+    int* list = new int[n];
     for (int i = 0; i < n; i++)
         list[i] = (rand() * rand()) % range;
     return(list);
 }
-void swap(int * arr, int i, int I) {
+
+void swap(int*& arr, int i, int I) {
     int temp = arr[i];
     arr[i] = arr[I];
     arr[I] = temp;
 }
 
-void HeapSort1(int * arr, int size, int i) {
+void HeapSort1(int*& arr, int size, int i) {
     int big = i;
     for (int j = i * 2 + 1; j < i * 2 + 3 && j < size; j++) {
         if (arr[big] < arr[j]) {
@@ -34,7 +35,8 @@ void HeapSort1(int * arr, int size, int i) {
         HeapSort1(arr, size, big);
     }
 }
-void HeapSort2(int * arr, int size) {
+
+void HeapSort2(int*& arr, int size) {
     for (int i = size / 2 - 1; i >= 0; i--) {
         HeapSort1(arr, size, i);
     }
@@ -45,7 +47,7 @@ void HeapSort2(int * arr, int size) {
     }
 }
 
-void ShellSort(int n, int * mass)
+void ShellSort(int*& mass, int n)
 {
 
     int i, j, step;
@@ -63,11 +65,9 @@ void ShellSort(int n, int * mass)
             }
             mass[j] = tmp;
         }
-    //for (int i : mass)
-    //    std::cout << i << ' ';
 }
 
-void InsertionSort(int n, int * mass)
+void InsertionSort(int*& mass, int n)
 {
 
     for (int i = 1; i < n; i++)
@@ -98,71 +98,85 @@ int main()
 
     int size2 = 100000; // For IsertionSort
     int size = 10000000; // enter the size of the array
-    std::ofstream out("sorting_time.txt", std::ios::app);
-    for (int p = 0; p < 10; p++) {
-        std::cout << "cont " << p << std::endl;
-        int * mass = make_array(size,  size);
-        int * mass2 = make_array(size2, size2);
+
+    int n;
+    std::cout << "Enter the number of cycles: ";
+    std::cin >> n;
+
+    std::ofstream out("sorting time.txt", std::ios::app);
+    for (int p = 0; p < n; p++) {
+
+        std::cout << "Set for this session: " << p+1 << " / " << n << std::endl;
+
+        int* base_mass = make_array(size, size);
+        int* base_inmass = make_array(size2, size2);
+
+        int* mass = new int[size];
+        for (int i = 0; i < size; i++)
+            mass[i] = base_mass[i];
+
         std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-        HeapSort2(mass2, size2);
-        std::cout << "step 1" << std::endl;
+        std::cout << "Heap sort" << std::endl;
+        HeapSort2(mass, size);
         std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
         std::chrono::duration<double> sec = end - start;
-        out << "HeapSort" << std::endl
-            << int(sec.count()) << std::endl;
+        out << "HeapSort: " << double(sec.count()) << std::endl;
+
+        for (int i = 0; i < size; i++)
+            mass[i] = base_mass[i];
 
         start = std::chrono::system_clock::now();
-        ShellSort(size, mass);
-        std::cout << "step 2" << std::endl;
+        std::cout << "Shell Sort" << std::endl;
+        ShellSort(mass, size);
         end = std::chrono::system_clock::now();
         sec = end - start;
-        out << "ShellSort" << std::endl
-            << int(sec.count()) << std::endl;
+        out << "ShellSort: " << double(sec.count()) << std::endl;
+
+        int* inmass = base_inmass;
 
         start = std::chrono::system_clock::now();
-        InsertionSort(size2, mass2);
-        std::cout << "step 3" << std::endl;
+        std::cout << "Insertion sort" << std::endl;
+        InsertionSort(inmass, size2);
         end = std::chrono::system_clock::now();
         sec = end - start;
-        out << "InsertionSort" << std::endl
-            << int(sec.count()) << std::endl;
+        out << "InsertionSort: " << double(sec.count()) << std::endl;
+
     }
     double time; std::string line;
     out.close();
     //Подсчет рез-та в файл "Final Res.txt"
-    std::ofstream out2("Final Res.txt");
-    std::ifstream file("sorting_time.txt");
-    if (file.is_open() && out2.is_open()) {
+    std::ofstream write("result.txt");
+    std::ifstream file("sorting time.txt");
+    if (file.is_open()) {
         double HeapS = 0, Shell = 0, Insert = 0, Summtime = 0; // Суммарные времена
         int HeapSc = 0, Shellc = 0, Insertc = 0; //Кол - во включений ф-й
-        for (int i = 1; i <= 3 * 10; i++) {
-            getline(file,line);
+
+        while (getline(file, line, ':'))
+        {
             if (line == "HeapSort") {
                 getline(file, line);
                 time = std::stod(line);
                 HeapS += time;
                 HeapSc += 1;
-                Summtime += time;
             }
             if (line == "ShellSort") {
                 getline(file, line);
                 time = std::stod(line);
                 Shell += time;
                 Shellc += 1;
-                Summtime += time;
             }
             if (line == "InsertionSort") {
                 getline(file, line);
                 time = std::stod(line);
                 Insert += time;
                 Insertc += 1;
-                Summtime += time;
             }
         }
-        out2 << "RES_FOR_HEAP_SORT : " << (double)HeapS / HeapSc << "sec \n"
-            << "RES_FOR_SHELL_SORT : " << (double)(Shell / Shellc) << "sec \n"
-            << "RES_FOR_INSERT_SORT : " << (double)(Insert / Insertc) << "sec \n";
-        out2.close();
+
+        write << "Average heap sort time: \t" << (int)HeapS / HeapSc << " sec \n"
+              << "Average shell sort time: \t" << (int)(Shell / Shellc) << " sec \n"
+              << "Average insert sort time: \t" << (int)(Insert / Insertc) << " sec \n";
+        write.close();
         file.close();
     }
     return 0;
